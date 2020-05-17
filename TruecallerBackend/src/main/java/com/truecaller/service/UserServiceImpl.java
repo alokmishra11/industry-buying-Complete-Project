@@ -7,6 +7,7 @@ import com.truecaller.model.SignupQdo;
 import com.truecaller.model.UserRdo;
 import com.truecaller.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,9 +19,19 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+	private PasswordEncoder bcryptEncoder;
+    
     @Override
     public LoginRdo signUp(SignupQdo signupQdo) {
-        return null;
+    	
+    	User user = new User();
+    	user.setName(signupQdo.getName());
+    	user.setPassword(bcryptEncoder.encode(user.getPassword()));
+    	user.setContact(null);
+    	user.setEmail(signupQdo.getEmail());
+    	userRepository.save(user);
+        return new LoginRdo(user);
     }
 
     /**
