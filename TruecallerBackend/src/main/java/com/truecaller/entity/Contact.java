@@ -8,8 +8,9 @@ import javax.persistence.GenerationType;
 public class Contact implements java.io.Serializable {
 
     private Long id;
-    private String phoneNumber;
+    private String phone;
     private long spamCount;
+    private User user;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,13 +23,13 @@ public class Contact implements java.io.Serializable {
         this.id = id;
     }
 
-    @Column(name = "phonenumber", nullable = false)
-    public String getPhoneNumber() {
-        return phoneNumber;
+    @Column(name = "phone", nullable = false)
+    public String getPhone() {
+        return phone;
     }
 
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
     @Column(name = "spamcount")
@@ -38,5 +39,15 @@ public class Contact implements java.io.Serializable {
 
     public void setSpamCount(long spamCount) {
         this.spamCount = spamCount;
+    }
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user")
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

@@ -9,7 +9,6 @@ public class User implements Serializable {
 
     private Long id;
     private String name;
-    private Contact contact;
     private String email;
     private String password;
 
@@ -31,16 +30,6 @@ public class User implements Serializable {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "contact")
-    public Contact getContact() {
-        return contact;
-    }
-
-    public void setContact(Contact contact) {
-        this.contact = contact;
     }
 
     @Column(name = "email")

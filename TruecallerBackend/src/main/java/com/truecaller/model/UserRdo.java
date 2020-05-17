@@ -1,17 +1,23 @@
 package com.truecaller.model;
 
 import com.truecaller.entity.User;
+import com.truecaller.entity.UserContact;
 
-/**
- * Created by emp350 on 17/05/20
- */
 public class UserRdo {
 
-    public long id;
     public String name;
+    public String phone;
+    public String email;
 
-    public UserRdo(User user){
-        this.id = user.getId();
-        this.name = user.getName();
+    public UserRdo() {
+    }
+
+    public UserRdo(UserContact userContact, long userId) {
+        this.name = userContact.getContactName();
+        this.phone = userContact.getContact().getPhone();
+        User contactUser = userContact.getContact().getUser();
+        if(contactUser != null && userContact.getUser().getId() == userId){
+            this.email = contactUser.getEmail();
+        }
     }
 }

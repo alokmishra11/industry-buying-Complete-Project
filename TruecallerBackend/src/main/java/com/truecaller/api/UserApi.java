@@ -70,7 +70,7 @@ public class UserApi {
     @GetMapping
     public ResponseEntity<BasicRdo> getUserDetails(@RequestParam(required = false, name = "search", defaultValue = "") String search) {
         BasicRdo<List<UserRdo>> basicRdo = new BasicRdo<>();
-        List<UserRdo> userDetails = userService.getUserDetails(search);
+        List<UserRdo> userDetails = userService.getUserDetails(null, search);
         return basicRdo.getResponse("Details fetched successfully", HttpStatus.OK, userDetails);
     }
     

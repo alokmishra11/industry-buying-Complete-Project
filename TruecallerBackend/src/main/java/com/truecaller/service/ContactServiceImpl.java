@@ -5,9 +5,6 @@ import com.truecaller.repository.ContactRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-/**
- * Created by emp350 on 17/05/20
- */
 @Service
 public class ContactServiceImpl implements ContactService {
 
@@ -17,12 +14,12 @@ public class ContactServiceImpl implements ContactService {
     /**
      * mark contact as spam
      *
-     * @param phoneNumber
+     * @param phone
      * @return
      */
     @Override
-    public boolean markAsSpam(String phoneNumber) {
-        Contact contact = contactRepository.findOneByPhoneNumber(phoneNumber);
+    public boolean markAsSpam(String phone) {
+        Contact contact = contactRepository.findOneByPhone(phone);
         if (contact != null) {
             long spamCount = contact.getSpamCount();
             contact.setSpamCount(spamCount + 1);
@@ -30,5 +27,16 @@ public class ContactServiceImpl implements ContactService {
             return true;
         }
         return false;
+    }
+
+    /**
+     * get contract by phone number
+     *
+     * @param phone
+     * @return
+     */
+    @Override
+    public Contact getOneByPhone(String phone) {
+        return contactRepository.findOneByPhone(phone);
     }
 }

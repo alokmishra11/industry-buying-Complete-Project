@@ -1,9 +1,10 @@
 package com.truecaller.service;
 
-/**
- * Created by emp350 on 17/05/20
- */
+import com.truecaller.entity.Contact;
+
 public interface ContactService {
 
-    boolean markAsSpam(String phoneNumber);
+    boolean markAsSpam(String phone);
+
+    Contact getOneByPhone(String phone);
 }

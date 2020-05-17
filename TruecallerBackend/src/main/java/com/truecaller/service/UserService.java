@@ -12,9 +12,9 @@ public interface UserService {
 
     LoginRdo signUp(SignupQdo signupQdo);
 
-    User getUserByPhone(String phoneNumber);
+    User getUserByPhone(String phone);
 
     LoginRdo login(LoginQdo loginQdo);
 
-    List<UserRdo> getUserDetails(String search);
+    List<UserRdo> getUserDetails(User user, String search);
 }
