@@ -42,7 +42,7 @@ public class UserApi {
 
     }
 
-    @GetMapping("/login")
+    @PostMapping("/login")
     public ResponseEntity<BasicRdo> login(@RequestBody @Validated LoginQdo loginQdo) throws Exception {
         BasicRdo<LoginRdo> basicRdo = new BasicRdo<>();
         LoginRdo loginRdo = userService.login(loginQdo);
