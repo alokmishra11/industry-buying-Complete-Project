@@ -1,6 +1,7 @@
 package com.truecaller.service;
 
 import com.truecaller.entity.Contact;
+import com.truecaller.entity.User;
 import com.truecaller.repository.ContactRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -38,5 +39,17 @@ public class ContactServiceImpl implements ContactService {
     @Override
     public Contact getOneByPhone(String phone) {
         return contactRepository.findOneByPhone(phone);
+    }
+
+    /**
+     * save contact user
+     *
+     * @param contact
+     * @param user
+     */
+    @Override
+    public void saveContactUser(Contact contact, User user) {
+        contact.setUser(user);
+        contactRepository.save(contact);
     }
 }

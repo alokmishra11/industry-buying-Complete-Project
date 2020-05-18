@@ -1,10 +1,11 @@
 package com.truecaller.api;
 
 import com.truecaller.common.BasicRdo;
-import com.truecaller.entity.User;
+import com.truecaller.entity.Contact;
 import com.truecaller.model.LoginQdo;
 import com.truecaller.model.LoginRdo;
 import com.truecaller.model.SignupQdo;
+import com.truecaller.service.ContactService;
 import com.truecaller.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,19 +19,24 @@ public class UserApi {
 
     @Autowired
     private UserService userService;
+    @Autowired
+    private ContactService contactService;
 
     @PostMapping("/sign-up")
     public ResponseEntity<BasicRdo> signUp(@RequestBody @Validated SignupQdo signupQdo) throws Exception {
         BasicRdo<LoginRdo> basicRdo = new BasicRdo<>();
         //check if user with given phone number is already registered
-        User userByPhone = userService.getUserByPhone(signupQdo.getPhone());
-        if (userByPhone != null) {
+        Contact contact = contactService.getOneByPhone(signupQdo.getPhone());
+        if (contact == null) {
+            return basicRdo.getResponse("Invalid contact number", HttpStatus.BAD_REQUEST, null);
+        }
+        if (contact.getUser() != null) {
             return basicRdo.getResponse("User already exist", HttpStatus.BAD_REQUEST, null);
         }
         // sign up
-        LoginRdo loginRdo = userService.signUp(signupQdo);
+        LoginRdo loginRdo = userService.signUp(signupQdo, contact);
         if (loginRdo != null) {
-            basicRdo.getResponse("Success", HttpStatus.OK, loginRdo);
+            return basicRdo.getResponse("Success", HttpStatus.OK, loginRdo);
         }
         return basicRdo.getResponse("Registration failed", HttpStatus.BAD_REQUEST, null);
 

@@ -1,6 +1,7 @@
 package com.truecaller.api;
 
 import com.truecaller.common.BasicRdo;
+import com.truecaller.common.config.JwtUtils;
 import com.truecaller.model.UserRdo;
 import com.truecaller.service.ContactService;
 import org.springframework.beans.factory.annotation.Autowired;

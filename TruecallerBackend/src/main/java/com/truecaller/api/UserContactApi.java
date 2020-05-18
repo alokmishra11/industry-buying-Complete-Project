@@ -1,6 +1,8 @@
 package com.truecaller.api;
 
 import com.truecaller.common.BasicRdo;
+import com.truecaller.common.config.AuthTokenFilter;
+import com.truecaller.entity.User;
 import com.truecaller.model.UserRdo;
 import com.truecaller.service.UserContactService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,12 +18,15 @@ public class UserContactApi {
 
     @Autowired
     private UserContactService userContactService;
+    @Autowired
+    private AuthTokenFilter authTokenFilter;
 
     @GetMapping
     public ResponseEntity<BasicRdo> getUserDetails(@RequestParam(required = false, name = "search", defaultValue = "") String search,
                                                    @RequestHeader("Authorization") String authToken) {
         BasicRdo<List<UserRdo>> basicRdo = new BasicRdo<>();
-        List<UserRdo> userDetails = userContactService.getUserDetails(null, search);
+        User user = authTokenFilter.getUserFromToken(authToken);
+        List<UserRdo> userDetails = userContactService.getUserDetails(user, search);
         return basicRdo.getResponse("Success", HttpStatus.OK, userDetails);
     }
 }

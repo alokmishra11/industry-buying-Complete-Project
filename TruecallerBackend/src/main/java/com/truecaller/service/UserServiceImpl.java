@@ -1,6 +1,6 @@
 package com.truecaller.service;
 
-import com.truecaller.config.JwtTokenUtil;
+import com.truecaller.common.config.JwtUtils;
 import com.truecaller.entity.Contact;
 import com.truecaller.entity.User;
 import com.truecaller.model.LoginQdo;
@@ -9,12 +9,12 @@ import com.truecaller.model.SignupQdo;
 import com.truecaller.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -28,18 +28,21 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private AuthenticationManager authenticationManager;
     @Autowired
-    private JwtTokenUtil jwtTokenUtil;
+    private JwtUtils jwtUtils;
     @Autowired
     private JwtUserDetailsService jwtUserDetailsService;
 
 
     @Override
-    public LoginRdo signUp(SignupQdo signupQdo) throws Exception {
+    @Transactional
+    public LoginRdo signUp(SignupQdo signupQdo, Contact contact) throws Exception {
         User user = new User();
         user.setName(signupQdo.getName());
-        user.setPassword(bcryptEncoder.encode(user.getPassword()));
+        user.setPassword(bcryptEncoder.encode(signupQdo.getPassword()));
         user.setEmail(signupQdo.getEmail());
         userRepository.save(user);
+        //save user in contact
+        contactService.saveContactUser(contact, user);
         // login from signup
         return loginFromSignup(signupQdo);
     }
@@ -72,20 +75,11 @@ public class UserServiceImpl implements UserService {
      * @return
      */
     @Override
-    public LoginRdo login(LoginQdo loginQdo) throws Exception {
-        authenticate(loginQdo.getPhone(), loginQdo.getPassword());
-        UserDetails userDetails = jwtUserDetailsService.loadUserByUsername(loginQdo.getPhone());
-        String token = jwtTokenUtil.generateToken(userDetails);
-        return new LoginRdo(token);
-    }
-
-    private void authenticate(String username, String password) throws Exception {
-        try {
-            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
-        } catch (DisabledException e) {
-            throw new Exception("User disabled", e);
-        } catch (BadCredentialsException e) {
-            throw new Exception("Invalid credentials", e);
-        }
+    public LoginRdo login(LoginQdo loginQdo) {
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(loginQdo.getPhone(), loginQdo.getPassword()));
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        String jwt = jwtUtils.generateJwtToken(authentication);
+        return new LoginRdo(jwt);
     }
 }

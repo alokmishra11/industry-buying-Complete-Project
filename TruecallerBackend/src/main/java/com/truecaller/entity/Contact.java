@@ -41,7 +41,7 @@ public class Contact implements java.io.Serializable {
         this.spamCount = spamCount;
     }
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user")
     public User getUser() {
         return user;
