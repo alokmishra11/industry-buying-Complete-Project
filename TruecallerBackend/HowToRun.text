@@ -1,0 +1,13 @@
+How to run in eclipse:
+1. Import project into eclipse
+2. Build the project
+
+3. Run the sql scripts from sql folder
+    3.1. truecaller.sql (database structure)
+    3.2. truecaller_data.sql (dumy data)
+
+4. User postman for testing the apis
+    4.1. signup api(provide required details to signup: name, phone, email(optional), password)
+    4.2. Get the authToken from api response
+    4.3. If you are already sign up then use login api to get authToken
+    4.4. Now you can use this authToken to search users by name and phone number and mark then as spam also
