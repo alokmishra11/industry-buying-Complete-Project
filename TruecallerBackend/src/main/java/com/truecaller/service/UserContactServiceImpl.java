@@ -21,7 +21,8 @@ public class UserContactServiceImpl implements UserContactService {
 
     @Override
     public List<UserContact> searchByName(String name) {
-        return userContactRepository.findByName(name);
+        String likeName = "%"+name+"%";
+        return userContactRepository.findByName(likeName, name);
     }
 
     @Override
