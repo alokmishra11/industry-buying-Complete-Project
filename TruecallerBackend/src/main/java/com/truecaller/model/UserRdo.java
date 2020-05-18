@@ -8,6 +8,7 @@ public class UserRdo {
     public String name;
     public String phone;
     public String email;
+    public long spamCount;
 
     public UserRdo() {
     }
@@ -19,5 +20,6 @@ public class UserRdo {
         if(contactUser != null && userContact.getUser().getId() == userId){
             this.email = contactUser.getEmail();
         }
+        this.spamCount = userContact.getContact().getSpamCount();
     }
 }
