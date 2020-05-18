@@ -8,9 +8,6 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-/**
- * Created by emp350 on 17/05/20
- */
 @Repository
 public interface UserContactRepository extends JpaRepository<UserContact, Long> {
 

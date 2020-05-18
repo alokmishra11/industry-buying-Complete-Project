@@ -2,9 +2,6 @@ package com.truecaller.model;
 
 import javax.validation.constraints.NotNull;
 
-/**
- * Created by emp350 on 17/05/20
- */
 public class LoginQdo {
 
     @NotNull

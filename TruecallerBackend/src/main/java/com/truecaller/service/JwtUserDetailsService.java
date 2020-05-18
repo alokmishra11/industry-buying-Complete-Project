@@ -1,36 +1,27 @@
 package com.truecaller.service;
 
-import java.util.ArrayList;
-
+import com.truecaller.entity.Contact;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.truecaller.dao.UserDao;
-import com.truecaller.model.DAOUser;
-
-
+import java.util.ArrayList;
 
 @Service
 public class JwtUserDetailsService implements UserDetailsService {
-	
-@Autowired
-private UserDao userDao;
 
-@Autowired
-private PasswordEncoder bcryptEncoder;
+    @Autowired
+    private ContactService contactService;
 
-@Override
-public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-	DAOUser user = userDao.findByUsername(username);
-	if (user == null) {
-		throw new UsernameNotFoundException("User not found with username: " + username);
-	}
-	return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(),
-			new ArrayList<>());
-}
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        Contact contact = contactService.getOneByPhone(username);
+        if (contact == null || contact.getUser() == null) {
+            throw new UsernameNotFoundException("User not found with username: " + username);
+        }
+        return new org.springframework.security.core.userdetails.User(contact.getPhone(), contact.getUser().getPassword(),
+                new ArrayList<>());
+    }
 }

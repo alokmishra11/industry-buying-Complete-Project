@@ -2,9 +2,6 @@ package com.truecaller.entity;
 
 import javax.persistence.*;
 
-/**
- * Created by emp350 on 17/05/20
- */
 @Entity
 @Table(name = "usercontact")
 public class UserContact implements java.io.Serializable{
